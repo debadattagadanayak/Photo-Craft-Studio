@@ -1,0 +1,6 @@
+{
+  "name": "No-Crop Collage Maker",
+  "description": "Create high-resolution collages while keeping every image fully visible without cropping or distortion.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
