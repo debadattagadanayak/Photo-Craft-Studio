@@ -38,10 +38,6 @@ export const Header: React.FC<HeaderProps> = ({
               <h1 className="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
                 Photo Craft Studio
               </h1>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-indigo-400" />
-                AI Studio
-              </span>
             </div>
             <p className="text-xs text-slate-400 hidden sm:block">
               Collage maker, bulk crop, circular/custom shapes & transparent borders.
