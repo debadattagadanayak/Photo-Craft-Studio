@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className="bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-30 px-4 py-3 sm:px-6">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="w-full max-w-[1920px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Brand / Logo */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
@@ -96,16 +96,6 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Quick Actions */}
         <div className="flex items-center gap-2 flex-wrap justify-end">
-          {imageCount === 0 && (
-            <button
-              onClick={onLoadSampleImages}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 transition-colors"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              Try Sample Photos
-            </button>
-          )}
-
           {imageCount > 0 && (
             <>
               {activeTab === 'collage' && onAIAutoAlign && (

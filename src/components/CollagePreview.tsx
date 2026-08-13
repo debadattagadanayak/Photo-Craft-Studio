@@ -147,13 +147,6 @@ export const CollagePreview: React.FC<CollagePreviewProps> = ({
             <Upload className="w-4 h-4" />
             Upload Your Photos
           </button>
-          <button
-            onClick={onLoadSampleImages}
-            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 transition-colors"
-          >
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            Try Sample Collage
-          </button>
         </div>
       </div>
     );

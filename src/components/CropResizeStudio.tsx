@@ -239,15 +239,6 @@ export const CropResizeStudio: React.FC<CropResizeStudioProps> = ({
                   </p>
                 </div>
               </div>
-
-              <button
-                type="button"
-                onClick={onLoadSampleImages}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-colors"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                Load Sample Photos
-              </button>
             </div>
 
             <ImageUploader onAddImages={onAddImages} />

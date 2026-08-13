@@ -78,7 +78,12 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
   // Measure display size on resize
   useEffect(() => {
     const updateSize = () => {
-      if (canvasRef.current) {
+      if (canvasContainerRef.current) {
+        const rect = canvasContainerRef.current.getBoundingClientRect();
+        if (rect.width > 0) {
+          setCanvasDisplaySize(rect.width - 16);
+        }
+      } else if (canvasRef.current) {
         const rect = canvasRef.current.getBoundingClientRect();
         if (rect.width > 0) {
           setCanvasDisplaySize(rect.width);
@@ -86,8 +91,15 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
       }
     };
     updateSize();
+    const ro = new ResizeObserver(updateSize);
+    if (canvasContainerRef.current) {
+      ro.observe(canvasContainerRef.current);
+    }
     window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', updateSize);
+    };
   }, []);
 
   // Pointer state for Photoshop Transform handle dragging
@@ -482,15 +494,6 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
                   </p>
                 </div>
               </div>
-
-              <button
-                type="button"
-                onClick={onLoadSampleImages}
-                className="px-3 py-1.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 text-xs font-semibold flex items-center gap-1.5 transition-colors"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                Load Sample Photos
-              </button>
             </div>
 
             <ImageUploader onAddImages={onAddImages} />
@@ -1005,7 +1008,7 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
           {/* Interactive Canvas Display Card with Photoshop Transform Tool Overlay */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl flex flex-col items-center justify-center min-h-[500px] relative overflow-hidden bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px]">
             {currentImageItem ? (
-              <div className="relative flex flex-col items-center gap-3 w-full max-w-[540px]">
+              <div className="relative flex flex-col items-center gap-3 w-full max-w-[800px] xl:max-w-[880px] mx-auto">
                 {/* Photoshop Transform Control Toolbar Bar */}
                 <div className="w-full bg-slate-950/90 border border-slate-800 rounded-xl p-2 flex flex-wrap items-center justify-between gap-2 text-xs shadow-lg backdrop-blur-md">
                   {/* Layer Toggle Tabs */}
@@ -1122,7 +1125,7 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
                 {/* Canvas Container with Photoshop Transform Handles Overlay */}
                 <div
                   ref={canvasContainerRef}
-                  className="relative w-full aspect-square rounded-2xl p-2 bg-slate-950/60 border border-slate-800/80 shadow-2xl group select-none overflow-hidden"
+                  className="relative w-full max-w-[720px] aspect-square mx-auto rounded-2xl p-2 bg-slate-950/60 border border-slate-800/80 shadow-2xl group select-none overflow-hidden"
                 >
                   {/* Main Rendering Canvas */}
                   <canvas
@@ -1332,7 +1335,7 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
                 <div>
                   <h3 className="text-base font-bold text-slate-200">No Photo Selected for Badge</h3>
                   <p className="text-xs text-slate-400 max-w-sm mt-1">
-                    Upload a photo or select sample photos above to render inside the Gold Winner or Silver Runner Up badge frame.
+                    Upload a photo to render inside the Gold Winner or Silver Runner Up badge frame.
                   </p>
                 </div>
               </div>
