@@ -51,7 +51,30 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
 }) => {
   // Selected photo ID
   const [selectedImageId, setSelectedImageId] = useState<string>('');
-  const [settings, setSettings] = useState<BadgeSettings>(DEFAULT_BADGE_SETTINGS);
+
+  // Per-photo badge settings (badge type, zoom, pan, rotation, text, etc.)
+  // Keyed by image id so each photo keeps its own individual adjustments.
+  const [perImageSettings, setPerImageSettings] = useState<Record<string, BadgeSettings>>({});
+
+  // Effective settings for the currently selected photo (falls back to defaults
+  // until that specific photo has been customized).
+  const settings: BadgeSettings =
+    (selectedImageId && perImageSettings[selectedImageId]) || DEFAULT_BADGE_SETTINGS;
+
+  // Updates settings for the currently selected photo only, leaving all other
+  // photos' settings untouched. Mirrors the React setState updater signature so
+  // all existing setSettings(...) call sites keep working unchanged.
+  const setSettings = (update: React.SetStateAction<BadgeSettings>) => {
+    if (!selectedImageId) return;
+    setPerImageSettings(prevMap => {
+      const prevSettings = prevMap[selectedImageId] || DEFAULT_BADGE_SETTINGS;
+      const nextSettings =
+        typeof update === 'function'
+          ? (update as (prev: BadgeSettings) => BadgeSettings)(prevSettings)
+          : update;
+      return { ...prevMap, [selectedImageId]: nextSettings };
+    });
+  };
 
   // Canvas & UI Refs/State
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -447,12 +470,24 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
           });
         }
 
+        // Use this photo's own individual badge settings/frame, not the
+        // currently selected photo's settings.
+        const imgSettings = perImageSettings[imgItem.id] || DEFAULT_BADGE_SETTINGS;
+        const imgFrameImg =
+          imgSettings.badgeType === 'custom'
+            ? customFrameImg
+            : imgSettings.badgeType === 'winner'
+            ? winnerFrameImg
+            : imgSettings.badgeType === '3rd_place'
+            ? thirdPlaceFrameImg
+            : runnerUpFrameImg;
+
         const tempCanvas = document.createElement('canvas');
-        renderBadgeToCanvas(tempCanvas, htmlImg, settings, activeFrameImg);
+        renderBadgeToCanvas(tempCanvas, htmlImg, imgSettings, imgFrameImg);
 
         const dataUrl = tempCanvas.toDataURL('image/png', 1.0);
         const base64Data = dataUrl.split(',')[1];
-        const fileName = `${imgItem.name.replace(/\.[^/.]+$/, '')}-${settings.badgeType}-badge.png`;
+        const fileName = `${imgItem.name.replace(/\.[^/.]+$/, '')}-${imgSettings.badgeType}-badge.png`;
 
         if (folder) {
           folder.file(fileName, base64Data, { base64: true });
@@ -461,7 +496,7 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
 
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       const link = document.createElement('a');
-      link.download = `${settings.badgeType}-badges-package.zip`;
+      link.download = `badges-package.zip`;
       link.href = URL.createObjectURL(zipBlob);
       link.click();
     } catch (err) {
