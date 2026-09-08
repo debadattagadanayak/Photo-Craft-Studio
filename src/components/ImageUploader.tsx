@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Upload, ImagePlus, ShieldCheck, AlertCircle } from 'lucide-react';
-import heic2any from 'heic2any';
+import { heicTo } from 'heic-to';
 import { ImageItem } from '../types';
 
 interface ImageUploaderProps {
@@ -17,12 +17,11 @@ const isHeicFile = (file: File) => {
 const convertHeicIfNeeded = async (file: File): Promise<File> => {
   if (isHeicFile(file)) {
     try {
-      const result = await heic2any({
+      const blobResult = await heicTo({
         blob: file,
-        toType: 'image/jpeg',
+        type: 'image/jpeg',
         quality: 0.92,
       });
-      const blobResult = Array.isArray(result) ? result[0] : result;
       const convertedFileName = file.name.replace(/\.(heic|heif)$/i, '.jpg');
       return new File([blobResult], convertedFileName, {
         type: 'image/jpeg',
@@ -30,7 +29,9 @@ const convertHeicIfNeeded = async (file: File): Promise<File> => {
       });
     } catch (err) {
       console.error('HEIC conversion failed:', err);
-      throw new Error(`Could not convert HEIC photo (${file.name})`);
+      throw new Error(
+        `Could not convert HEIC photo (${file.name}). Some newer iPhone photos (e.g. Adaptive HDR) aren't decodable in-browser yet — try disabling "Adaptive HDR" in iPhone Camera settings, or use Share > "Save as JPEG" before uploading.`
+      );
     }
   }
   return file;

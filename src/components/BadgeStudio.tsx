@@ -1008,22 +1008,23 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
           {/* Interactive Canvas Display Card with Photoshop Transform Tool Overlay */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl flex flex-col items-center justify-center min-h-[500px] relative overflow-hidden bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px]">
             {currentImageItem ? (
-              <div className="relative flex flex-col items-center gap-3 w-full max-w-[800px] xl:max-w-[880px] mx-auto">
+              <div className="relative flex flex-col items-center gap-3 w-full max-w-[1040px] mx-auto">
+                <div className="flex w-full flex-col items-center justify-center gap-3 lg:flex-row lg:items-start">
                 {/* Photoshop Transform Control Toolbar Bar */}
-                <div className="w-full bg-slate-950/90 border border-slate-800 rounded-xl p-2 flex flex-wrap items-center justify-between gap-2 text-xs shadow-lg backdrop-blur-md">
+                <div className="order-2 w-full max-w-[880px] self-end bg-slate-950/90 border border-slate-800 rounded-xl p-2 flex flex-wrap items-center justify-between gap-2 text-xs shadow-lg backdrop-blur-md lg:order-2 lg:w-[68px] lg:max-w-none lg:flex-col lg:justify-start">
                   {/* Layer Toggle Tabs */}
-                  <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
+                  <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 lg:flex-col">
                     <button
                       type="button"
                       onClick={() => setActiveTransformLayer('photo')}
-                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-all ${
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-all lg:px-2 ${
                         activeTransformLayer === 'photo'
                           ? 'bg-indigo-600 text-white shadow-md'
                           : 'text-slate-400 hover:text-slate-200'
                       }`}
                     >
                       <ImageIcon className="w-3.5 h-3.5" />
-                      <span>Photo Layer</span>
+                      <span className="lg:hidden">Photo Layer</span>
                     </button>
 
                     <button
@@ -1034,19 +1035,19 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
                           setSettings(s => ({ ...s, showTextOverlay: true }));
                         }
                       }}
-                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-all ${
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-all lg:px-2 ${
                         activeTransformLayer === 'text'
                           ? 'bg-pink-600 text-white shadow-md'
                           : 'text-slate-400 hover:text-slate-200'
                       }`}
                     >
                       <Type className="w-3.5 h-3.5" />
-                      <span>Name Tag</span>
+                      <span className="lg:hidden">Name Tag</span>
                     </button>
                   </div>
 
                   {/* Quick Action Transform Controls */}
-                  <div className="flex items-center gap-1 flex-wrap">
+                  <div className="flex items-center gap-1 flex-wrap lg:flex-col">
                     <button
                       type="button"
                       onClick={() => {
@@ -1125,7 +1126,7 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
                 {/* Canvas Container with Photoshop Transform Handles Overlay */}
                 <div
                   ref={canvasContainerRef}
-                  className="relative w-full max-w-[720px] aspect-square mx-auto rounded-2xl p-2 bg-slate-950/60 border border-slate-800/80 shadow-2xl group select-none overflow-hidden"
+                  className="order-1 relative w-full max-w-[min(920px,calc(100vh-16rem))] aspect-square mx-auto rounded-2xl p-2 bg-slate-950/60 border border-slate-800/80 shadow-2xl group select-none overflow-hidden lg:order-1"
                 >
                   {/* Main Rendering Canvas */}
                   <canvas
@@ -1311,6 +1312,7 @@ export const BadgeStudio: React.FC<BadgeStudioProps> = ({
                       </div>
                     </div>
                   )}
+                </div>
                 </div>
 
                 <div className="flex items-center justify-between w-full text-xs text-slate-400 px-1">
